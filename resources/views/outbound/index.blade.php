@@ -8,118 +8,91 @@
                 <a href="{{ route('deliveries.index') }}" class="btn btn-primary">Create</a>
             </div>
             <div class="card-body">
-                <!-- Search Input -->
-                <div class="mb-3">
-                    <input type="text" id="filter-input" class="form-control" placeholder="Filter by text...">
-                </div>
-
                 <table class="table table-striped">
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>Order Info</th>
-                            <th>Master Document</th>
-                            <th>Regular Document</th>
-                            <th>Yard</th>
-                            <th>Total Container</th>
+                            <th>Nomor Order</th>
+                            <th>Waktu Pengeluaran</th>
+                            <th>Jenis Dokumen</th>
+                            <th>Nomor Dokumen</th>
+                            <th>Tanggal Dokumen</th>
                             <th>Status</th>
-                            <th>Action</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
-                    <tbody id="data-table-body">
-                        <!-- Data will be inserted here by JavaScript -->
+                    <tbody>
+                        @foreach($deliveries as $index => $delivery)
+                            <tr>
+                                <td>{{ $index + 1 }}</td>
+                                <td>{{ $delivery->order_number }}</td>
+                                <td>{{ $delivery->release_time }}</td>
+                                <td>{{ $delivery->document_type }}</td>
+                                <td>{{ $delivery->document_number }}</td>
+                                <td>{{ $delivery->document_date }}</td>
+                                <td>
+                                    @if ($delivery->FL_STATUS === 'N')
+                                        Pending
+                                    @elseif ($delivery->FL_STATUS === 'Y')
+                                        Accepted
+                                    @elseif ($delivery->FL_STATUS === 'X')
+                                        Reject
+                                    @else
+                                        Unknown
+                                    @endif
+                                </td>
+                                <td>
+                                    <!-- Add buttons or links for actions like edit, delete -->
+                                    <a href="{{ route('deliveries.show', $delivery->id) }}" class="btn btn-warning btn-sm">Detail</a>
+                                    <!-- Delete Button triggers modal -->
+                                    @if ($delivery->FL_STATUS === 'N')
+                                        <button class="btn btn-danger btn-sm delete-btn" data-id="{{ $delivery->id }}"
+                                            data-toggle="modal" data-target="#deleteModal">Delete</button>
+                                    @endif
+                                </td>
+                            </tr>
+                        @endforeach
                     </tbody>
-                    <div id="no-data" class="text-center" style="display: none;">
-                        <p class="text-muted">No Data</p>
-                    </div>
                 </table>
             </div>
         </div>
+    </div>
 
-
+    <!-- Delete Confirmation Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this delivery?
+                </div>
+                <div class="modal-footer">
+                    <form id="delete-form" action="#" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 @endsection
 
 @push('scripts')
     <script>
-        // Sample data
-        const data = [{
-                no: 1,
-                orderInfo: 'Order 001',
-                masterDocument: 'Doc 001',
-                regularDocument: 'Reg Doc 001',
-                yard: 'Yard A',
-                totalContainer: 10,
-                status: 'Pending',
-                action: '<button class="btn btn-primary">View</button>'
-            },
-            {
-                no: 2,
-                orderInfo: 'Order 002',
-                masterDocument: 'Doc 002',
-                regularDocument: 'Reg Doc 002',
-                yard: 'Yard B',
-                totalContainer: 15,
-                status: 'Completed',
-                action: '<button class="btn btn-primary">View</button>'
-            }
-            // Add more data as needed
-        ];
-
-        // Function to populate the table
-        function populateTable(data) {
-            const tableBody = document.getElementById('data-table-body');
-            const noData = document.getElementById('no-data');
-
-            tableBody.innerHTML = ''; // Clear existing data
-
-            if (data.length === 0) {
-                noData.style.display = 'block'; // Show "No Data" message
-            } else {
-                noData.style.display = 'none'; // Hide "No Data" message
-                data.forEach(item => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                    <td>${item.no}</td>
-                    <td>${item.orderInfo}</td>
-                    <td>${item.masterDocument}</td>
-                    <td>${item.regularDocument}</td>
-                    <td>${item.yard}</td>
-                    <td>${item.totalContainer}</td>
-                    <td>${item.status}</td>
-                    <td>${item.action}</td>
-                `;
-                    tableBody.appendChild(row);
+        document.addEventListener('DOMContentLoaded', function() {
+            // Attach click event to all delete buttons
+            document.querySelectorAll('.delete-btn').forEach(function(button) {
+                button.addEventListener('click', function() {
+                    var deliveryId = this.getAttribute('data-id');
+                    var form = document.getElementById('delete-form');
+                    form.action = '/outbound/' + deliveryId; // Set the action URL dynamically
                 });
-            }
-        }
-
-        // Populate the table with sample data
-        populateTable(data);
-
-        // Real-time filtering functionality
-        $('#filter-input').on('input', function() {
-            const query = $(this).val().toLowerCase();
-            const filteredData = data.filter(item =>
-                item.orderInfo.toLowerCase().includes(query) ||
-                item.masterDocument.toLowerCase().includes(query) ||
-                item.regularDocument.toLowerCase().includes(query) ||
-                item.yard.toLowerCase().includes(query) ||
-                item.status.toLowerCase().includes(query)
-            );
-            populateTable(filteredData);
+            });
         });
-
-        // Later, replace sample data with AJAX call
-        // $.ajax({
-        //     url: 'your-api-endpoint',
-        //     method: 'GET',
-        //     success: function(response) {
-        //         populateTable(response.data);
-        //     },
-        //     error: function(error) {
-        //         console.error('Error fetching data:', error);
-        //     }
-        // });
     </script>
 @endpush

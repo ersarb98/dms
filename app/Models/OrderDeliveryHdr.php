@@ -12,6 +12,11 @@ class OrderDeliveryHdr extends Model
     // Define the table name
     protected $table = 't_order_delivery_hdr';
 
+    public function orderDeliveryDtl()
+    {
+        return $this->hasMany(OrderDeliveryDtl::class, 'order_id', 'id');
+    }
+
     // Define the primary key, if it's not 'id'
     protected $primaryKey = 'id';
 
@@ -25,7 +30,8 @@ class OrderDeliveryHdr extends Model
         'truck_type', 
         'license_plate', 
         'destination', 
-        'notes'
+        'notes',
+        'FL_STATUS'
     ];
 
     // Define the relationship with OrderDeliveryDtl
