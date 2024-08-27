@@ -20,7 +20,7 @@
                                     <div class="col-md-6">
                                         <label for="order_number" class="form-label">Nomor Order</label>
                                         <input type="text" class="form-control" id="order_number" name="order_number"
-                                            required>
+                                            required disabled>
                                     </div>
                                     <div class="col-md-6">
                                         <label for="release_time" class="form-label">Waktu Pengeluaran</label>
@@ -155,6 +155,21 @@
         document.addEventListener('click', function(e) {
             if (e.target && e.target.classList.contains('remove-container')) {
                 e.target.closest('.container-item').remove();
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Function to generate a unique order number
+            function generateUniqueOrderNumber() {
+                const timestamp = new Date().getTime(); // Current timestamp
+                const randomSalt = Math.random().toString(36).substring(2, 10); // Random salt
+                return `DEL-${timestamp}-${randomSalt}`; // Example format: ORD-1628302918101-xf2g4w6t
+            }
+
+            // Set the generated order number to the input field
+            const orderNumberInput = document.getElementById('order_number');
+            if (orderNumberInput) {
+                orderNumberInput.value = generateUniqueOrderNumber();
             }
         });
     </script>

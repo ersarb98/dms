@@ -1,125 +1,104 @@
 @extends('layouts.app')
-@section('pageTitle', 'Order Delivery')
+@section('pageTitle', 'Order Receiving')
+
 @section('content')
     <div class="container">
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
-                <span>Order Delivery</span>
-                <a href="{{ route('deliveries.index') }}" class="btn btn-primary">Create</a>
+                <span>Order Receiving</span>
+                <a href="{{ route('receiving.index') }}" class="btn btn-primary">Create</a>
             </div>
             <div class="card-body">
-                <!-- Search Input -->
-                <div class="mb-3">
-                    <input type="text" id="filter-input" class="form-control" placeholder="Filter by text...">
-                </div>
-
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Order Info</th>
-                            <th>Master Document</th>
-                            <th>Regular Document</th>
-                            <th>Yard</th>
-                            <th>Total Container</th>
-                            <th>Status</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="data-table-body">
-                        <!-- Data will be inserted here by JavaScript -->
-                    </tbody>
-                    <div id="no-data" class="text-center" style="display: none;">
-                        <p class="text-muted">No Data</p>
-                    </div>
-                </table>
+                @if ($orderReceivings->isEmpty())
+                    <p>No records found.</p>
+                @else
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Order Number</th>
+                                <th>Tipe Dokumen</th>
+                                <th>Nomor Dokumen</th>
+                                <th>Tanggal Dokumen</th>
+                                <th>Pengirim</th>
+                                <th>Waktu Gate In</th>
+                                <th>Catatan</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($orderReceivings as $orderReceiving)
+                                <tr>
+                                    <td>{{ $orderReceiving->order_number }}</td>
+                                    <td>{{ $orderReceiving->tipe_dokumen }}</td>
+                                    <td>{{ $orderReceiving->nomor_dokumen }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($orderReceiving->tanggal_dokumen)->format('d-m-Y') }}</td>
+                                    <td>{{ $orderReceiving->pengirim }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($orderReceiving->waktu_gate_in)->format('d-m-Y H:i') }}</td>
+                                    <td>{{ $orderReceiving->catatan }}</td>
+                                    <td>
+                                        @if ($orderReceiving->status === 'N')
+                                            <span class="badge bg-warning">Pending</span>
+                                        @elseif ($orderReceiving->status === 'Y')
+                                            <span class="badge bg-success">Approved</span>
+                                        @else
+                                            <span class="badge bg-danger">Rejected</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <a href="{{ route('receiving.show', $orderReceiving->id) }}" class="btn btn-info btn-sm">
+                                            View Details
+                                        </a>
+                                        @if ($orderReceiving->status === 'N')
+                                            <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal" data-id="{{ $orderReceiving->id }}">
+                                                Delete
+                                            </button>
+                                        @endif
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                @endif
             </div>
         </div>
+    </div>
 
-
+    <!-- Bootstrap Modal for Delete Confirmation -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this record?
+                </div>
+                <div class="modal-footer">
+                    <form id="delete-form" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 @endsection
 
 @push('scripts')
     <script>
-        // Sample data
-        const data = [{
-                no: 1,
-                orderInfo: 'Order 001',
-                masterDocument: 'Doc 001',
-                regularDocument: 'Reg Doc 001',
-                yard: 'Yard A',
-                totalContainer: 10,
-                status: 'Pending',
-                action: '<button class="btn btn-primary">View</button>'
-            },
-            {
-                no: 2,
-                orderInfo: 'Order 002',
-                masterDocument: 'Doc 002',
-                regularDocument: 'Reg Doc 002',
-                yard: 'Yard B',
-                totalContainer: 15,
-                status: 'Completed',
-                action: '<button class="btn btn-primary">View</button>'
-            }
-            // Add more data as needed
-        ];
-
-        // Function to populate the table
-        function populateTable(data) {
-            const tableBody = document.getElementById('data-table-body');
-            const noData = document.getElementById('no-data');
-
-            tableBody.innerHTML = ''; // Clear existing data
-
-            if (data.length === 0) {
-                noData.style.display = 'block'; // Show "No Data" message
-            } else {
-                noData.style.display = 'none'; // Hide "No Data" message
-                data.forEach(item => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                    <td>${item.no}</td>
-                    <td>${item.orderInfo}</td>
-                    <td>${item.masterDocument}</td>
-                    <td>${item.regularDocument}</td>
-                    <td>${item.yard}</td>
-                    <td>${item.totalContainer}</td>
-                    <td>${item.status}</td>
-                    <td>${item.action}</td>
-                `;
-                    tableBody.appendChild(row);
-                });
-            }
-        }
-
-        // Populate the table with sample data
-        populateTable(data);
-
-        // Real-time filtering functionality
-        $('#filter-input').on('input', function() {
-            const query = $(this).val().toLowerCase();
-            const filteredData = data.filter(item =>
-                item.orderInfo.toLowerCase().includes(query) ||
-                item.masterDocument.toLowerCase().includes(query) ||
-                item.regularDocument.toLowerCase().includes(query) ||
-                item.yard.toLowerCase().includes(query) ||
-                item.status.toLowerCase().includes(query)
-            );
-            populateTable(filteredData);
+        // JavaScript to handle modal form submission
+        document.addEventListener('DOMContentLoaded', function () {
+            var deleteModal = document.getElementById('deleteModal');
+            deleteModal.addEventListener('show.bs.modal', function (event) {
+                var button = event.relatedTarget; // Button that triggered the modal
+                var id = button.getAttribute('data-id'); // Extract info from data-* attributes
+                var form = deleteModal.querySelector('#delete-form');
+                form.action = '/inbound/' + id; // Update form action to the correct route
+            });
         });
-
-        // Later, replace sample data with AJAX call
-        // $.ajax({
-        //     url: 'your-api-endpoint',
-        //     method: 'GET',
-        //     success: function(response) {
-        //         populateTable(response.data);
-        //     },
-        //     error: function(error) {
-        //         console.error('Error fetching data:', error);
-        //     }
-        // });
     </script>
 @endpush

@@ -42,7 +42,7 @@
                         section.submenu.forEach(item => {
                             if (item.IsAccordion) {
                                 html += `<li>
-                                            <a href="#${item.DisplayMenu.replace(/\s+/g, '-').toLowerCase()}" class="ps-2 btn btn-link dropdown-toggle d-flex align-items-center" data-toggle="collapse" aria-expanded="false">
+                                            <a href="/#${item.DisplayMenu.replace(/\s+/g, '-').toLowerCase()}" class="ps-2 btn btn-link dropdown-toggle d-flex align-items-center" data-toggle="collapse" aria-expanded="false">
                                                 ${item.DisplayMenu}
                                                 <span class="accordion-indicator ml-auto">
                                                 </span>
@@ -50,13 +50,13 @@
                                             <ul class="collapse list-unstyled" id="${item.DisplayMenu.replace(/\s+/g, '-').toLowerCase()}">`;
                                 item.submenu.forEach(submenu => {
                                     html += `<li>
-                                                <a href="${submenu.UrlMenu}" class="btn btn-link ps-3">${submenu.DisplayMenu}</a>
+                                                <a href="/${submenu.UrlMenu}" class="btn btn-link ps-3">${submenu.DisplayMenu}</a>
                                             </li>`;
                                 });
                                 html += '</ul></li>';
                             } else {
                                 html += `<li>
-                                            <a href="${item.UrlMenu}" class="btn btn-link ps-2">${item.DisplayMenu}</a>
+                                            <a href="/${item.UrlMenu}" class="btn btn-link ps-2">${item.DisplayMenu}</a>
                                         </li>`;
                             }
                         });
