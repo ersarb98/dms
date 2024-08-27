@@ -8,8 +8,9 @@
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <span>Order Receiving Details</span>
-                <a href="{{ route('receiving.index') }}" class="btn btn-primary">Back to List</a>
+                <button id="backButton" class="btn btn-primary">Back to List</button>
             </div>
+
             <div class="card-body">
                 <dl class="row">
                     <dt class="col-sm-3">Order Number</dt>
@@ -40,7 +41,8 @@
                     <dd class="col-sm-9">{{ $orderReceiving->asal }}</dd>
 
                     <dt class="col-sm-3">Waktu Gate In</dt>
-                    <dd class="col-sm-9">{{ \Carbon\Carbon::parse($orderReceiving->waktu_gate_in)->format('d-m-Y H:i') }}</dd>
+                    <dd class="col-sm-9">{{ \Carbon\Carbon::parse($orderReceiving->waktu_gate_in)->format('d-m-Y H:i') }}
+                    </dd>
 
                     <dt class="col-sm-3">Catatan</dt>
                     <dd class="col-sm-9">{{ $orderReceiving->catatan }}</dd>
@@ -56,7 +58,7 @@
                         @endif
                     </dd>
                 </dl>
-                
+
                 <!-- If you want to show related containers, add another table here -->
                 <h5>Containers</h5>
                 <table class="table table-bordered">
@@ -68,7 +70,8 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($orderReceiving->containers as $container) <!-- Assuming you have a relationship set up -->
+                        @foreach ($orderReceiving->containers as $container)
+                            <!-- Assuming you have a relationship set up -->
                             <tr>
                                 <td>{{ $container->no_cont }}</td>
                                 <td>{{ $container->type }}</td>
@@ -80,4 +83,22 @@
             </div>
         </div>
     </div>
+    @push('scripts')
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // Handle Back button click
+                document.getElementById('backButton').addEventListener('click', function() {
+                    // Check if there's a stored URL in sessionStorage
+                    var lastPage = sessionStorage.getItem('lastPage');
+                    if (lastPage) {
+                        window.location.href = lastPage; // Navigate to the last page
+                    } else {
+                        // Fallback if there's no lastPage stored
+                        window.history.back();
+                    }
+                });
+            });
+        </script>
+    @endpush
+
 @endsection

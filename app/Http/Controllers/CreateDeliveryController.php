@@ -24,7 +24,7 @@ class CreateDeliveryController extends Controller
             'truck_type' => 'required|string|max:255',
             'license_plate' => 'required|string|max:255',
             'destination' => 'required|string|max:255',
-            'notes' => 'nullable|string',
+            'notes' => 'string',
             'container_number' => 'required|array',
             'container_number.*' => 'required|string|max:255',
             'container_size' => 'required|array',

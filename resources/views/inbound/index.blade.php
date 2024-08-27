@@ -34,7 +34,8 @@
                                     <td>{{ $orderReceiving->nomor_dokumen }}</td>
                                     <td>{{ \Carbon\Carbon::parse($orderReceiving->tanggal_dokumen)->format('d-m-Y') }}</td>
                                     <td>{{ $orderReceiving->pengirim }}</td>
-                                    <td>{{ \Carbon\Carbon::parse($orderReceiving->waktu_gate_in)->format('d-m-Y H:i') }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($orderReceiving->waktu_gate_in)->format('d-m-Y H:i') }}
+                                    </td>
                                     <td>{{ $orderReceiving->catatan }}</td>
                                     <td>
                                         @if ($orderReceiving->status === 'N')
@@ -46,11 +47,13 @@
                                         @endif
                                     </td>
                                     <td>
-                                        <a href="{{ route('receiving.show', $orderReceiving->id) }}" class="btn btn-info btn-sm">
+                                        <a href="{{ route('receiving.show', $orderReceiving->id) }}"
+                                            class="btn btn-info btn-sm">
                                             View Details
                                         </a>
                                         @if ($orderReceiving->status === 'N')
-                                            <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal" data-id="{{ $orderReceiving->id }}">
+                                            <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal"
+                                                data-bs-target="#deleteModal" data-id="{{ $orderReceiving->id }}">
                                                 Delete
                                             </button>
                                         @endif
@@ -90,10 +93,12 @@
 
 @push('scripts')
     <script>
+        sessionStorage.setItem('lastPage', window.location.href);
+
         // JavaScript to handle modal form submission
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             var deleteModal = document.getElementById('deleteModal');
-            deleteModal.addEventListener('show.bs.modal', function (event) {
+            deleteModal.addEventListener('show.bs.modal', function(event) {
                 var button = event.relatedTarget; // Button that triggered the modal
                 var id = button.getAttribute('data-id'); // Extract info from data-* attributes
                 var form = deleteModal.querySelector('#delete-form');
