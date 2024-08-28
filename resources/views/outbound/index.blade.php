@@ -8,6 +8,20 @@
                 <a href="{{ route('deliveries.index') }}" class="btn btn-primary">Create</a>
             </div>
             <div class="card-body">
+                @if (session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
+            @endif
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
                 <table class="table table-striped">
                     <thead>
                         <tr>
