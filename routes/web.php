@@ -9,6 +9,9 @@ use App\Http\Controllers\CreateDeliveryController;
 use App\Http\Controllers\CreateReceivingController;
 use App\Http\Controllers\Request\ApprovalController;
 use App\Http\Controllers\Request\ApprovalDeliveryController;
+use App\Http\Controllers\OperationController;
+use App\Http\Controllers\GateController;
+use App\Http\Controllers\SetPergerakanController;
 
 Auth::routes();
 //web route
@@ -18,6 +21,9 @@ Route::get('/createdelivery', [CreateDeliveryController::class, 'index'])->name(
 Route::get('/createreceiving', [CreateReceivingController::class, 'index'])->name('receiving.index');
 Route::get('/outbound/{id}', [OutboundController::class, 'show'])->name('deliveries.show');
 Route::get('/inbound', [InboundController::class, 'index'])->name('inbound.index');
+Route::get('/operation_list', [OperationController::class, 'index'])->name('operation.index');
+Route::get('/gatein', [GateController::class, 'index'])->name('gate.index');
+Route::get('/set_pergerakan', [SetPergerakanController::class, 'index'])->name('setpergerakan.index');
 
 //Approval
 Route::get('/approvalreceiving', [ApprovalController::class, 'index'])->name('approval.index');
@@ -33,7 +39,10 @@ Route::delete('/deliveries/{id}', [OutboundController::class, 'destroy'])->name(
 Route::post('/inbound/store', [CreateReceivingController::class, 'store'])->name('inbound.store');
 Route::delete('/inbound/{id}', [InboundController::class, 'destroy'])->name('inbound.destroy');
 Route::get('/inbound/{id}', [InboundController::class, 'show'])->name('receiving.show');
-
+Route::get('/gatein/search', [GateController::class, 'search'])->name('gate.search');
+Route::put('/gatein/set-gate-in/{id}', [GateController::class, 'setGateIn'])->name('gate.setGateIn');
+Route::get('/search-pergerakan', [SetPergerakanController::class, 'search'])->name('pergerakan.search');
+Route::post('/pergerakan/store', [SetPergerakanController::class, 'store'])->name('pergerakan.store');
 
 
 //menu

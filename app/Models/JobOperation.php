@@ -25,8 +25,15 @@ class JobOperation extends Model
         'wk_status_done'
     ];
 
+
     public function jobContainer()
     {
         return $this->belongsTo(JobContainer::class, 'id_job_container');
+    }
+
+    public function latestJobOperation()
+    {
+        return $this->hasOne(JobOperation::class, 'id_job_container')
+                    ->latest('created_at');
     }
 }
