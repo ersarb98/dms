@@ -35,7 +35,7 @@
                                     <div class="col-md-6">
                                         <label for="order_number" class="form-label">Nomor Order</label>
                                         <input type="text" class="form-control" id="order_number" name="order_number"
-                                            required disabled>
+                                            required readonly>
                                     </div>
                                     <div class="col-md-6">
                                         <label for="release_time" class="form-label">Waktu Pengeluaran</label>

@@ -17,7 +17,7 @@
                                 <div class="col-md-6 mb-3">
                                     <label for="order_number">Order Number</label>
                                     <input type="text" id="order_number" name="order_number" class="form-control"
-                                        required disabled>
+                                        required readonly>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label for="tipe_dokumen">Tipe Dokumen</label>

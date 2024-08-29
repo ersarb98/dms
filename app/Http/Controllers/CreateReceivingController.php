@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\OrderReceivingHdr;
 use App\Models\OrderReceivingDtl;
+use Illuminate\Support\Facades\Log;
 class CreateReceivingController extends Controller
 {
     public function index()
@@ -43,7 +44,7 @@ class CreateReceivingController extends Controller
             return redirect()->route('inbound.index')->with('success', 'Order Receiving created successfully.');
         } catch (\Exception $e) {
             // Log the error or handle it
-            \Log::error('Error creating order receiving: ' . $e->getMessage());
+            Log::error('Error creating order receiving: ' . $e->getMessage());
             return redirect()->back()->withErrors(['error' => 'Failed to create order receiving.']);
         }        
     }
