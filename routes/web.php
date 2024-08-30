@@ -12,6 +12,8 @@ use App\Http\Controllers\Request\ApprovalDeliveryController;
 use App\Http\Controllers\OperationController;
 use App\Http\Controllers\GateController;
 use App\Http\Controllers\SetPergerakanController;
+use App\Http\Controllers\SetRealisasiController;
+use App\Http\Controllers\InspectionController;
 
 Auth::routes();
 //web route
@@ -24,6 +26,9 @@ Route::get('/inbound', [InboundController::class, 'index'])->name('inbound.index
 Route::get('/operation_list', [OperationController::class, 'index'])->name('operation.index');
 Route::get('/gatein', [GateController::class, 'index'])->name('gate.index');
 Route::get('/set_pergerakan', [SetPergerakanController::class, 'index'])->name('setpergerakan.index');
+Route::get('/set_realisasi', [SetRealisasiController::class, 'index'])->name('setrealisasi.index');
+Route::get('/set_inspeksi', [InspectionController::class, 'index'])->name('inspection.index');
+
 
 //Approval
 Route::get('/approvalreceiving', [ApprovalController::class, 'index'])->name('approval.index');
@@ -43,6 +48,9 @@ Route::get('/gatein/search', [GateController::class, 'search'])->name('gate.sear
 Route::put('/gatein/set-gate-in/{id}', [GateController::class, 'setGateIn'])->name('gate.setGateIn');
 Route::get('/search-pergerakan', [SetPergerakanController::class, 'search'])->name('pergerakan.search');
 Route::post('/pergerakan/store', [SetPergerakanController::class, 'store'])->name('pergerakan.store');
+Route::get('/search-realisasi', [SetRealisasiController::class, 'search'])->name('realisasi.search');
+Route::post('/set-realisasi', [SetRealisasiController::class, 'store'])->name('realisasi.store');
+
 
 
 //menu
