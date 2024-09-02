@@ -10,7 +10,7 @@
                         <h3>Set Inspeksi</h3>
                     </div>
                     <div class="card-body">
-                        <form action="{{ route('realisasi.search') }}" method="GET">
+                        <form action="{{ route('inspection.search') }}" method="GET">
                             @csrf
                             <div class="form-group">
                                 <label for="containerNumber">Container Number:</label>

@@ -30,6 +30,7 @@ class SetRealisasiController extends Controller
             WHERE C.rn = 1 
               AND A.status = 'Pending'
               AND C.status = 'Pending'
+              and C.jenis_job = 'INSPECTION'
               AND B.no_cont = ?
         ", [$containerNumber]);
 

@@ -37,4 +37,8 @@ class GateController extends Controller
 
         return redirect()->route('operation.index')->with('success', 'Gate In sukses.');
     }
+
+    public function gateout(){
+
+    }
 }

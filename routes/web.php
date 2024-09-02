@@ -50,6 +50,7 @@ Route::get('/search-pergerakan', [SetPergerakanController::class, 'search'])->na
 Route::post('/pergerakan/store', [SetPergerakanController::class, 'store'])->name('pergerakan.store');
 Route::get('/search-realisasi', [SetRealisasiController::class, 'search'])->name('realisasi.search');
 Route::post('/set-realisasi', [SetRealisasiController::class, 'store'])->name('realisasi.store');
+Route::get('/search-inspeksi', [InspectionController::class, 'search'])->name('inspection.search');
 
 
 
