@@ -25,6 +25,7 @@ Route::get('/outbound/{id}', [OutboundController::class, 'show'])->name('deliver
 Route::get('/inbound', [InboundController::class, 'index'])->name('inbound.index');
 Route::get('/operation_list', [OperationController::class, 'index'])->name('operation.index');
 Route::get('/gatein', [GateController::class, 'index'])->name('gate.index');
+Route::get('/gateout', [GateController::class, 'gateout'])->name('gate.out');
 Route::get('/set_pergerakan', [SetPergerakanController::class, 'index'])->name('setpergerakan.index');
 Route::get('/set_realisasi', [SetRealisasiController::class, 'index'])->name('setrealisasi.index');
 Route::get('/set_inspeksi', [InspectionController::class, 'index'])->name('inspection.index');
@@ -45,7 +46,9 @@ Route::post('/inbound/store', [CreateReceivingController::class, 'store'])->name
 Route::delete('/inbound/{id}', [InboundController::class, 'destroy'])->name('inbound.destroy');
 Route::get('/inbound/{id}', [InboundController::class, 'show'])->name('receiving.show');
 Route::get('/gatein/search', [GateController::class, 'search'])->name('gate.search');
+Route::get('/gateout/search', [GateController::class, 'outsearch'])->name('gate.outsearch');
 Route::put('/gatein/set-gate-in/{id}', [GateController::class, 'setGateIn'])->name('gate.setGateIn');
+Route::put('/gatein/set-gate-Out/{id}', [GateController::class, 'setGateOut'])->name('gate.setGateOut');
 Route::get('/search-pergerakan', [SetPergerakanController::class, 'search'])->name('pergerakan.search');
 Route::post('/pergerakan/store', [SetPergerakanController::class, 'store'])->name('pergerakan.store');
 Route::get('/search-realisasi', [SetRealisasiController::class, 'search'])->name('realisasi.search');
